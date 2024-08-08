@@ -29,6 +29,7 @@ chmod -R 777 /data/logs
 chown -R $FTP_ADMIN_USER:$FTP_ADMIN_USER /data/www
 chmod -R 777 /data/www
 
+/buildindex.sh
 
 # 启动
-vsftpd /data/config/vsftpd.conf & nginx -c /data/config/nginx.conf -g 'daemon off;'
+/watch.sh & vsftpd /data/config/vsftpd.conf & nginx -c /data/config/nginx.conf -g 'daemon off;'
