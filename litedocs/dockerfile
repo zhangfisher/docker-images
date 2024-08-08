@@ -1,0 +1,23 @@
+FROM alpine:latest
+
+ENV FTP_ADMIN_USER='admin'
+ENV FTP_ADMIN_PASSWORD='123456##**'
+
+# 安装必要的软件包
+RUN apk update && \
+    apk add --no-cache bash nginx vsftpd openssh inotify-tools && \
+    mkdir -p /initdata /data
+
+
+COPY data/ /initdata
+COPY *.sh /
+
+# 创建 FTP 用户并设置密码
+RUN adduser -D -h /data -s /sbin/nologin $FTP_ADMIN_USER && \
+    echo "$FTP_ADMIN_USER:$FTP_ADMIN_PASSWORD" | chpasswd && \
+    chmod +x /start.sh /buildindex.sh /watch.sh
+
+# 暴露端口
+EXPOSE 80 21 10000-10010
+
+CMD ["/start.sh"]

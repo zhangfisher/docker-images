@@ -11,5 +11,12 @@
     <div>use ftp to upload files</div>
     <div>default user: admin</div>
     <div>default password: 123456##**</div>
+   <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="file">Select file:</label>
+      <input type="file" name="file">
+      <label for="destination">Enter upload path:</label>
+      <input type="text" name="destination" placeholder="Enter upload path">
+      <input type="submit" value="Upload">
+  </form>
   </body>
 </html>

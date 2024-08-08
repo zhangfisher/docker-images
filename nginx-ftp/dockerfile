@@ -1,23 +1,28 @@
 FROM alpine:latest
 
-ENV FTP_ADMIN_USER='admin'
-ENV FTP_ADMIN_PASSWORD='123456##**'
+ENV ADMIN_USER='admin'
+ENV ADMIN_PASSWORD='123456##**' 
 
-# 安装必要的软件包
-RUN apk update && \
-    apk add --no-cache bash nginx vsftpd openssh inotify-tools && \
-    mkdir -p /initdata /data
-
-
+# 将数据文件复制到容器中的/initdata目录
 COPY data/ /initdata
 COPY *.sh /
 
-# 创建 FTP 用户并设置密码
-RUN adduser -D -h /data -s /sbin/nologin $FTP_ADMIN_USER && \
-    echo "$FTP_ADMIN_USER:$FTP_ADMIN_PASSWORD" | chpasswd && \
+RUN \
+    # 安装必要的软件包
+    apk update && \
+    apk add --no-cache bash nginx vsftpd openssh inotify-tools && \
+    # 创建 FTP 用户并设置密码
+    adduser -D -h /data -s /bin/bash $ADMIN_USER && \
+    echo "$ADMIN_USER:$ADMIN_PASSWORD" | chpasswd && \
+    # 配置SSH
+    ssh-keygen -A && \
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
+    # 修改权限
     chmod +x /start.sh /buildindex.sh /watch.sh
 
+
 # 暴露端口
-EXPOSE 80 21 10000-10010
+EXPOSE 80 21 22 10000-10010
 
 CMD ["/start.sh"]

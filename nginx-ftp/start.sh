@@ -26,8 +26,10 @@ done
 
 mkdir -p /data/logs
 chmod -R 777 /data/logs
-chown -R $FTP_ADMIN_USER:$FTP_ADMIN_USER /data/www
+chown -R $ADMIN_USER:$ADMIN_USER /data/www
 chmod -R 777 /data/www
+
+/usr/sbin/sshd
 
 /buildindex.sh
 

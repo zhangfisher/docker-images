@@ -16,15 +16,33 @@ docker run --name nginx-ftp -d \
     zhangfisher/nginx-ftp    
 ```
 
+也可以自行构建镜像：
 
-### 说明
+```bash
+git clone https://github.com/zhangfisher/dockerfiles.git
+cd dockerfiles/nginx-ftp
+docker build -t nginx-ftp .
+```
 
-`nginx`和`ftp`服务器共享相同的根目录,使用`FTP`登录`ftp`服务器，进入的就是`Web`服务器的根目录,因此可以管理`web`服务器的文件。
+### 特性
+
+#### 共享目录
+
+内置的`nginx`和`ftp`服务器共享相同的根目录,使用`FTP`登录`ftp`服务器，进入的就是`Web`服务器的根目录,因此可以管理`web`服务器的文件。
 
 - `nginx`默认监听`80`端口
 - `vsftp`默认监听`21`端口
-- `ftp`服务器默认的用户名`admin`和密码`123456##**`,可以通过环境变量`FTP_ADMIN_USER`和`FTP_ADMIN_PASSWORD`来修改。
-- 容器的`/data`文件夹是`ftp`服务器的根目录，也是`web`根目录，可以通过`-v`参数挂载到宿主机上，以便持久化数据，例如`-v /path/to/your/www:/data`。`/data`文件夹的结构如下：
+- `ftp`服务器默认的用户名`admin`和密码`123456##**`,可以通过环境变量`ADMIN_USER`和`ADMIN_PASSWORD`来修改。
+
+#### SSH
+
+内置`openssh-server`，可以通过`ssh`登录容器.
+
+默认的用户名和密码与`ftp`一样，可以通过环境变量`ADMIN_USER`和`ADMIN_PASSWORD`来修改。
+
+#### 数据目录
+
+容器内的`/data`文件夹是`ftp`服务器的根目录，也是`web`根目录，可以通过`-v`参数挂载到宿主机上，以便持久化数据，例如`-v /path/to/your/www:/data`。`/data`文件夹的结构如下：
 
 ```bash
 data
@@ -36,7 +54,9 @@ data
 └── logs           # nginx和ftp的日志文件    
 ```
 
-- 容器运行时`watch.sh`会监视`www`文件夹下的所有子文件夹内的`index.html`文件和`readme.md`文件变化,提取文件的`title`和`description`和文件夹名称,生成`index.json`文件。
+#### 自动索引
+
+容器运行时会启动`watch.sh`会监视`www`文件夹下的所有子文件夹内的`index.html`文件和`readme.md`文件变化,提取文件的`title`和`description`和文件夹名称,生成`index.json`文件。
 
 提取文件的`title`和`description`的规则如下：
 
@@ -103,9 +123,3 @@ data
     }
 ]
 ```
-
-
-
-
-
-
