@@ -8,14 +8,14 @@
 ### 使用
 
 ```bash
-docker run --name nginx-ftp -d \
+docker run --name your-name -d \
     --restart always \
     -p 80:80  \
     -p 21:21  \
+    -p 22:22 \
     -v /path/to/your/www:/data \
     zhangfisher/nginx-ftp    
 ```
-
 也可以自行构建镜像：
 
 ```bash
@@ -38,7 +38,8 @@ docker build -t nginx-ftp .
 
 内置`openssh-server`，可以通过`ssh`登录容器.
 
-默认的用户名和密码与`ftp`一样，可以通过环境变量`ADMIN_USER`和`ADMIN_PASSWORD`来修改。
+- 默认的用户名和密码与`ftp`一样，可以通过环境变量`ADMIN_USER`和`ADMIN_PASSWORD`来修改。
+- 默认监听`22`端口
 
 #### 数据目录
 
@@ -54,13 +55,15 @@ data
 └── logs           # nginx和ftp的日志文件    
 ```
 
-#### 自动索引
+您可以直接在宿主机上修改`/path/to/your/www`下的配置文件。
+
+#### 自动生成索引
 
 容器运行时会启动`watch.sh`会监视`www`文件夹下的所有子文件夹内的`index.html`文件和`readme.md`文件变化,提取文件的`title`和`description`和文件夹名称,生成`index.json`文件。
 
 提取文件的`title`和`description`的规则如下：
 
-- 提取`index.html`文件的`title`和`description`
+- **提取`index.html`文件的`title`和`description`**
 
 ```html
 <!DOCTYPE html>
@@ -76,7 +79,7 @@ data
 </html>
 ```
 
-- 提取`readme.md`文件的第一行`#标题`的后续行作为`description`
+- **提取`readme.md`文件的第一行`#标题`的后续行作为`description`**
 
 ```markdown
 # 这里是标题
@@ -123,3 +126,4 @@ data
     }
 ]
 ```
+
