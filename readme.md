@@ -1,6 +1,5 @@
 # Dockfiles
 
-
 ## nginx + ftp
 
 构建内置`nginx` + `vsftp`的镜像，`ftp`服务器和`web`服务器共享相同的根目录，因此您可以通过`ftp`来管理`web`服务器的文件。
@@ -14,14 +13,21 @@ docker run --name your-name -d \
     -p 21:21  \
     -p 22:22 \
     -v /path/to/your/www:/data \
-    zhangfisher/nginx-ftp    
+    zhangfisher/nginx-ftp
+
+
 ```
+
 也可以自行构建镜像：
 
 ```bash
 git clone https://github.com/zhangfisher/dockerfiles.git
 cd dockerfiles/nginx-ftp
 docker build -t nginx-ftp .
+
+
+docker run -d --name ftp-docs  --restart always -p 80:80 -p 20:20 -p 21:21  -p 222:22  -p 21100-21110:21100-21110 -v /home/meeyi/docs:/data -e PASV_MIN_PORT=21100  -e PASV_MAX_PORT=21110  nginx-ftp
+
 ```
 
 ### 特性
@@ -52,7 +58,7 @@ data
 │   └── nginx.conf
 ├── www            # nginx和ftp的根目录
 │    └── index.html
-└── logs           # nginx和ftp的日志文件    
+└── logs           # nginx和ftp的日志文件
 ```
 
 您可以直接在宿主机上修改`/path/to/your/www`下的配置文件。
@@ -69,13 +75,12 @@ data
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>标题</title>
-    <meta name="description" content="描述">  
+    <meta name="description" content="描述" />
   </head>
-  <body> 
-  </body>
+  <body></body>
 </html>
 ```
 
@@ -87,15 +92,14 @@ data
 这里是描述
 
 ## ...
-
 ```
 
 如下面的目录结构：
 
 ```bash
 data
-├── config          
-├── www            
+├── config
+├── www
 │    ├── index.html
 │    ├── A
 │    │   └─ readme.md
@@ -109,21 +113,20 @@ data
 
 ```json
 [
-    {
-        "name":"A",
-        "title": "A-Title",
-        "description": "A的描述"
-    },
-    {
-        "name":"B",
-        "title": "B-Title",
-        "description": "B的描述"
-    },
-    {
-        "name":"C",
-        "title": "C-Title",
-        "description": "C的描述"
-    }
+  {
+    "name": "A",
+    "title": "A-Title",
+    "description": "A的描述"
+  },
+  {
+    "name": "B",
+    "title": "B-Title",
+    "description": "B的描述"
+  },
+  {
+    "name": "C",
+    "title": "C-Title",
+    "description": "C的描述"
+  }
 ]
 ```
-

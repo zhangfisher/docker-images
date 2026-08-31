@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine
 
 ENV ADMIN_USER='admin'
 ENV ADMIN_PASSWORD='123456##**' 
@@ -20,6 +20,9 @@ RUN \
     echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     # 修改权限
     chmod +x /start.sh /buildindex.sh /watch.sh
+
+# 暴露端口
+EXPOSE 80 21 22 10000-10010 21100-21110
 
 
 # 暴露端口
